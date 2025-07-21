@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Kismet</title>
+<title>Kismet ForgedFate</title>
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -238,8 +238,8 @@ function load_main_ui() {
         // Try to scrape the server name
         kismet_ui_base.FetchServerName(function(name) {
             if (name.length > 0) {
-                $('#topbar_title').html("Kismet - " + name);
-                top.document.title = "Kismet - " + name;
+                $('#topbar_title').html("Kismet <span style='color: #ff6b35; font-size: 0.8em;'>ForgedFate</span> - " + name);
+                top.document.title = "Kismet ForgedFate - " + name;
             }
         
         });
@@ -298,7 +298,7 @@ function shrinker() {
 <body>
     <div id="pm_menu" class="pm_hide pm_initial kismet_sidebar">
         <div class="k-sb-header">
-            <h1>Kismet</h1>
+            <h1>Kismet <span style="color: #ff6b35; font-size: 0.7em;">ForgedFate</span></h1>
             <hr>
         </div>
         <div class="k-sb-main">
@@ -308,7 +308,7 @@ function shrinker() {
     <div id="panelcontainer" class="panelcontainer">
         <div class="topbar">
             <i id="pm_open" class="fa fa-bars k-sb-hamburger"></i>
-            <div class="hidden-mobile" id="topbar_title">Kismet</div>
+            <div class="hidden-mobile" id="topbar_title">Kismet <span style="color: #ff6b35; font-size: 0.8em;">ForgedFate</span></div>
             <div class="topright_holder" id="iconbar"></div>
         </div>
 
