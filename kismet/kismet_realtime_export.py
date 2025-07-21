@@ -10,6 +10,7 @@ import json
 import argparse
 import logging
 import time
+import socket
 from datetime import datetime
 from typing import Dict, Any, Optional, Callable
 import signal
@@ -445,12 +446,179 @@ class MQTTExporter:
             self.client.disconnect()
 
 
+class TCPExporter:
+    """Export device data to TCP server (configurable IP:port)"""
+    
+    def __init__(self, server_host: str, server_port: int, format_type: str = "json"):
+        self.server_host = server_host
+        self.server_port = server_port
+        self.format_type = format_type
+        self.writer = None
+        self.reader = None
+        self.connected = False
+        self.device_count = 0
+        self.event_count = 0
+        
+        # Setup logging
+        self.logger = logging.getLogger(f"{__name__}.TCPExporter")
+        
+    async def connect(self):
+        """Connect to TCP server"""
+        try:
+            self.reader, self.writer = await asyncio.open_connection(
+                self.server_host, self.server_port
+            )
+            self.connected = True
+            self.logger.info(f"Connected to TCP server at {self.server_host}:{self.server_port}")
+        except Exception as e:
+            self.logger.error(f"Failed to connect to TCP server: {e}")
+            self.connected = False
+            
+    async def send_data(self, data: str):
+        """Send data to TCP server"""
+        if not self.connected:
+            await self.connect()
+            
+        if self.connected and self.writer:
+            try:
+                # Add newline delimiter for easier parsing on server side
+                message = data + "\n"
+                self.writer.write(message.encode('utf-8'))
+                await self.writer.drain()
+            except Exception as e:
+                self.logger.error(f"Failed to send data to TCP server: {e}")
+                self.connected = False
+                
+    async def export_device(self, device_info: Dict[str, Any]):
+        """Export device to TCP server"""
+        self.device_count += 1
+        
+        if self.format_type == "json":
+            # Send as JSON
+            data = json.dumps({
+                "type": "device",
+                "data": device_info,
+                "sequence": self.device_count,
+                "timestamp": time.time()
+            })
+        elif self.format_type == "csv":
+            # Send as CSV format
+            data = f"DEVICE,{device_info['mac_addr']},{device_info['phy_type']},{device_info['signal_dbm']},{device_info['total_packets']},{device_info['timestamp']}"
+        else:
+            # Send as simple key-value format
+            data = f"DEVICE|{device_info['mac_addr']}|{device_info['phy_type']}|{device_info['signal_dbm']}|{device_info['total_packets']}"
+            
+        await self.send_data(data)
+        
+    async def export_event(self, event_data: Dict[str, Any]):
+        """Export event to TCP server"""
+        self.event_count += 1
+        
+        if self.format_type == "json":
+            data = json.dumps({
+                "type": "event",
+                "data": event_data,
+                "sequence": self.event_count,
+                "timestamp": time.time()
+            })
+        else:
+            data = f"EVENT|{json.dumps(event_data)}"
+            
+        await self.send_data(data)
+        
+    async def close(self):
+        """Close TCP connection"""
+        if self.writer:
+            self.writer.close()
+            await self.writer.wait_closed()
+        self.connected = False
+        self.logger.info(f"TCP connection closed. Sent {self.device_count} devices, {self.event_count} events")
+
+
+class UDPExporter:
+    """Export device data to UDP server (configurable IP:port)"""
+    
+    def __init__(self, server_host: str, server_port: int, format_type: str = "json"):
+        self.server_host = server_host
+        self.server_port = server_port
+        self.format_type = format_type
+        self.sock = None
+        self.device_count = 0
+        self.event_count = 0
+        
+        # Setup logging
+        self.logger = logging.getLogger(f"{__name__}.UDPExporter")
+        
+    async def connect(self):
+        """Setup UDP socket"""
+        try:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.logger.info(f"UDP socket configured for {self.server_host}:{self.server_port}")
+        except Exception as e:
+            self.logger.error(f"Failed to create UDP socket: {e}")
+            
+    async def send_data(self, data: str):
+        """Send data via UDP"""
+        if not self.sock:
+            await self.connect()
+            
+        if self.sock:
+            try:
+                message = data.encode('utf-8')
+                self.sock.sendto(message, (self.server_host, self.server_port))
+            except Exception as e:
+                self.logger.error(f"Failed to send UDP data: {e}")
+                
+    async def export_device(self, device_info: Dict[str, Any]):
+        """Export device via UDP"""
+        self.device_count += 1
+        
+        if self.format_type == "json":
+            # Send as JSON
+            data = json.dumps({
+                "type": "device",
+                "data": device_info,
+                "sequence": self.device_count,
+                "timestamp": time.time()
+            })
+        elif self.format_type == "csv":
+            # Send as CSV format
+            data = f"DEVICE,{device_info['mac_addr']},{device_info['phy_type']},{device_info['signal_dbm']},{device_info['total_packets']},{device_info['timestamp']}"
+        else:
+            # Send as simple key-value format
+            data = f"DEVICE|{device_info['mac_addr']}|{device_info['phy_type']}|{device_info['signal_dbm']}|{device_info['total_packets']}"
+            
+        await self.send_data(data)
+        
+    async def export_event(self, event_data: Dict[str, Any]):
+        """Export event via UDP"""
+        self.event_count += 1
+        
+        if self.format_type == "json":
+            data = json.dumps({
+                "type": "event",
+                "data": event_data,
+                "sequence": self.event_count,
+                "timestamp": time.time()
+            })
+        else:
+            data = f"EVENT|{json.dumps(event_data)}"
+            
+        await self.send_data(data)
+        
+    async def close(self):
+        """Close UDP socket"""
+        if self.sock:
+            self.sock.close()
+        self.logger.info(f"UDP socket closed. Sent {self.device_count} devices, {self.event_count} events")
+
+
 async def main():
     parser = argparse.ArgumentParser(description="Kismet Real-Time Data Export Client")
     parser.add_argument("--kismet-host", default="localhost", help="Kismet server hostname")
     parser.add_argument("--kismet-port", type=int, default=2501, help="Kismet server port")
     parser.add_argument("--update-rate", type=int, default=5, help="Update rate in seconds")
-    parser.add_argument("--export-type", choices=["console", "postgres", "influxdb", "mqtt"], 
+    parser.add_argument("--export-type", choices=["console", "postgres", "influxdb", "mqtt", "tcp", "udp"], 
                        default="console", help="Export destination type")
     
     # PostgreSQL options
@@ -468,6 +636,12 @@ async def main():
     parser.add_argument("--mqtt-topic-prefix", default="kismet", help="MQTT topic prefix")
     parser.add_argument("--mqtt-username", help="MQTT username")
     parser.add_argument("--mqtt-password", help="MQTT password")
+    
+    # TCP/UDP options
+    parser.add_argument("--server-host", default="172.18.18.20", help="TCP/UDP server hostname or IP address")
+    parser.add_argument("--server-port", type=int, default=8685, help="TCP/UDP server port")
+    parser.add_argument("--data-format", choices=["json", "csv", "simple"], default="json", 
+                       help="Data format for TCP/UDP export (json, csv, or simple)")
     
     args = parser.parse_args()
     
@@ -499,6 +673,12 @@ async def main():
             sys.exit(1)
         client.exporter = MQTTExporter(args.mqtt_host, args.mqtt_port, 
                                       args.mqtt_topic_prefix, args.mqtt_username, args.mqtt_password)
+    elif args.export_type == "tcp":
+        print(f"Configuring TCP export to {args.server_host}:{args.server_port} (format: {args.data_format})")
+        client.exporter = TCPExporter(args.server_host, args.server_port, args.data_format)
+    elif args.export_type == "udp":
+        print(f"Configuring UDP export to {args.server_host}:{args.server_port} (format: {args.data_format})")
+        client.exporter = UDPExporter(args.server_host, args.server_port, args.data_format)
     
     # Setup signal handlers for graceful shutdown
     def signal_handler(signum, frame):
