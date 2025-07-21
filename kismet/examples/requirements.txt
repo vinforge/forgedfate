@@ -1,0 +1,12 @@
+# Core dependencies
+websockets>=11.0.3
+asyncio-mqtt>=0.13.0
+
+# Database adapters (optional)
+asyncpg>=0.29.0
+influxdb-client>=1.38.0
+paho-mqtt>=1.6.1
+elasticsearch>=8.0.0
+
+# Utility libraries
+python-dateutil>=2.8.2

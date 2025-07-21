@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database for device storage
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: kismet_db
+      POSTGRES_USER: kismet
+      POSTGRES_PASSWORD: kismet_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - kismet-network
+
+  # InfluxDB for time series data
+  influxdb:
+    image: influxdb:2.7
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: admin_password
+      DOCKER_INFLUXDB_INIT_ORG: kismet-org
+      DOCKER_INFLUXDB_INIT_BUCKET: kismet-data
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: kismet-admin-token
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    networks:
+      - kismet-network
+
+  # MQTT broker
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_logs:/mosquitto/log
+    networks:
+      - kismet-network
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:10.0.0
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+      - postgres
+    networks:
+      - kismet-network
+
+  # Kismet export client (PostgreSQL)
+  kismet-export-postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.export
+    environment:
+      KISMET_HOST: host.docker.internal
+      EXPORT_TYPE: postgres
+      POSTGRES_CONN: postgresql://kismet:kismet_password@postgres:5432/kismet_db
+      UPDATE_RATE: 5
+    depends_on:
+      - postgres
+    networks:
+      - kismet-network
+    restart: unless-stopped
+
+  # Kismet export client (InfluxDB)
+  kismet-export-influxdb:
+    build:
+      context: .
+      dockerfile: Dockerfile.export
+    environment:
+      KISMET_HOST: host.docker.internal
+      EXPORT_TYPE: influxdb
+      INFLUX_URL: http://influxdb:8086
+      INFLUX_TOKEN: kismet-admin-token
+      INFLUX_ORG: kismet-org
+      INFLUX_BUCKET: kismet-data
+      UPDATE_RATE: 1
+    depends_on:
+      - influxdb
+    networks:
+      - kismet-network
+    restart: unless-stopped
+
+  # Kismet export client (MQTT)
+  kismet-export-mqtt:
+    build:
+      context: .
+      dockerfile: Dockerfile.export
+    environment:
+      KISMET_HOST: host.docker.internal
+      EXPORT_TYPE: mqtt
+      MQTT_HOST: mosquitto
+      MQTT_TOPIC_PREFIX: kismet
+      UPDATE_RATE: 2
+    depends_on:
+      - mosquitto
+    networks:
+      - kismet-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  influxdb_data:
+  grafana_data:
+  mosquitto_data:
+  mosquitto_logs:
+
+networks:
+  kismet-network:
+    driver: bridge
