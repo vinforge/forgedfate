@@ -1,0 +1,274 @@
+/* ForgedFate API Configuration Interface Styles */
+
+.k-api-container {
+    padding: 20px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.k-api-header {
+    margin-bottom: 30px;
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 20px;
+}
+
+.k-api-header h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.k-api-header p {
+    color: #666;
+    font-size: 14px;
+}
+
+.k-api-panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.k-api-export-panel {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    background: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.k-api-export-panel:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0,123,255,0.1);
+}
+
+.k-api-panel-disabled {
+    opacity: 0.6;
+    background: #f5f5f5;
+}
+
+.k-api-panel-disabled:hover {
+    border-color: #e0e0e0;
+    box-shadow: none;
+}
+
+.k-api-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.k-api-panel-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.k-api-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+}
+
+.k-api-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.k-api-toggle-slider {
+    position: relative;
+    width: 50px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 24px;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+.k-api-toggle-slider:before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+.k-api-toggle input:checked + .k-api-toggle-slider {
+    background-color: #007bff;
+}
+
+.k-api-toggle input:checked + .k-api-toggle-slider:before {
+    transform: translateX(26px);
+}
+
+.k-api-form {
+    margin-bottom: 20px;
+}
+
+.k-api-form-field {
+    margin-bottom: 15px;
+}
+
+.k-api-form-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    font-size: 13px;
+}
+
+.k-api-input,
+.k-api-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.k-api-input:focus,
+.k-api-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.k-api-command-panel {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.k-api-command-panel h4 {
+    margin: 0 0 10px 0;
+    color: #495057;
+    font-size: 14px;
+}
+
+.k-api-command {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 12px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    word-break: break-all;
+    margin-bottom: 10px;
+    border: 1px solid #4a5568;
+}
+
+.k-api-copy-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s;
+}
+
+.k-api-copy-btn:hover {
+    background: #0056b3;
+}
+
+.k-api-copy-btn:active {
+    background: #004085;
+}
+
+.k-api-docs {
+    background: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 6px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.k-api-docs h3 {
+    margin: 0 0 15px 0;
+    color: #0056b3;
+}
+
+.k-api-docs p {
+    margin: 10px 0;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .k-api-panels {
+        grid-template-columns: 1fr;
+    }
+    
+    .k-api-container {
+        padding: 10px;
+    }
+    
+    .k-api-panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .k-api-toggle {
+        align-self: flex-end;
+    }
+}
+
+/* Animation for panel state changes */
+.k-api-export-panel {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Checkbox styling for additional options */
+.k-api-form input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(1.2);
+}
+
+.k-api-form label:has(input[type="checkbox"]) {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: normal;
+    margin-top: 10px;
+}
+
+/* Status indicators */
+.k-api-status-enabled {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.k-api-status-disabled {
+    color: #6c757d;
+    font-weight: normal;
+}
+
+/* Highlight active configurations */
+.k-api-export-panel:not(.k-api-panel-disabled) {
+    border-color: #28a745;
+    background: #f8fff9;
+}
+
+.k-api-export-panel:not(.k-api-panel-disabled) .k-api-panel-header h3 {
+    color: #28a745;
+}
