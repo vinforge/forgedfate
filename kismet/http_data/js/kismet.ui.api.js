@@ -505,22 +505,7 @@ function createHelpSection(export_type) {
 }
 
 // Complete the form field creation
-function completeFormField() {
-    // This function was split during editing - functionality is in createFormField above
-        $('<label>')
-        .text(label)
-    )
-    .append(
-        $('<input>', {
-            type: type,
-            value: value,
-            class: 'k-api-input'
-        })
-        .on('input', function() {
-            callback($(this).val());
-        })
-    );
-}
+// Form field creation is handled in the createFormField function above
 
 // Create select field helper
 function createSelectField(label, options, value, callback) {
@@ -667,16 +652,6 @@ exports.ShowAPI = function() {
         of: 'window',
     });
 };
-
-/* Add the API sidebar item */
-kismet_ui_sidebar.AddSidebarItem({
-    id: 'sidebar-api',
-    listTitle: '<i class="fa fa-cogs"></i> API',
-    priority: -50000,
-    clickCallback: function() {
-        exports.ShowAPI();
-    }
-});
 
 // Connectivity testing functionality
 function createConnectivityTestPanel(export_type) {
@@ -1281,6 +1256,16 @@ function exportDiagnosticReport() {
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
 }
+
+/* Add the API sidebar item */
+kismet_ui_sidebar.AddSidebarItem({
+    id: 'sidebar-api',
+    listTitle: '<i class="fa fa-cogs"></i> API',
+    priority: -50000,
+    clickCallback: function() {
+        exports.ShowAPI();
+    }
+});
 
 // We're done loading
 exports.load_complete = 1;
