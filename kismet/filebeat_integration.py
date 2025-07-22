@@ -238,8 +238,8 @@ class FilebeatKismetIntegrator:
 
 def main():
     parser = argparse.ArgumentParser(description='ForgedFate Filebeat Integration Tool')
-    parser.add_argument('--elasticsearch-url', required=True, 
-                       help='Elasticsearch URL (e.g., https://172.18.18.20:9200)')
+    parser.add_argument('--elasticsearch-url', required=True,
+                       help='Elasticsearch URL (e.g., https://your-elasticsearch:9200)')
     parser.add_argument('--username', help='Elasticsearch username')
     parser.add_argument('--password', help='Elasticsearch password')
     parser.add_argument('--device-name', default='forgedfate-device',

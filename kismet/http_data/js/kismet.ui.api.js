@@ -38,14 +38,14 @@ var connectivity_monitoring = {
 var export_configs = {
     tcp: {
         enabled: false,
-        server_host: '172.18.18.20',
+        server_host: 'localhost',
         server_port: 8685,
         data_format: 'json',
         update_rate: 5
     },
     udp: {
         enabled: false,
-        server_host: '172.18.18.20',
+        server_host: 'localhost',
         server_port: 8685,
         data_format: 'json',
         update_rate: 5
@@ -1292,19 +1292,19 @@ function showFilebeatIntegrationDialog() {
                 <div class="k-api-form-field">
                     <label>Elasticsearch URL:</label>
                     <input type="text" id="filebeat-es-url" value="${config.hosts || ''}"
-                           placeholder="https://172.18.18.20:9200">
+                           placeholder="https://your-elasticsearch:9200">
                 </div>
 
                 <div class="k-api-form-field">
                     <label>Username:</label>
                     <input type="text" id="filebeat-username" value="${config.username || ''}"
-                           placeholder="filebeat-user">
+                           placeholder="your-username">
                 </div>
 
                 <div class="k-api-form-field">
                     <label>Password:</label>
                     <input type="password" id="filebeat-password" value="${config.password || ''}"
-                           placeholder="password">
+                           placeholder="your-password">
                 </div>
 
                 <div class="k-api-form-field">
@@ -1334,7 +1334,7 @@ function showFilebeatIntegrationDialog() {
             <div class="k-api-filebeat-command">
                 <h4><i class="fa fa-terminal"></i> Command to run:</h4>
                 <div class="k-api-command-display" id="filebeat-command">
-                    <code>sudo python3 /path/to/kismet/filebeat_integration.py --elasticsearch-url "https://172.18.18.20:9200" --username "filebeat-user" --password "password" --device-name "forgedfate-device"</code>
+                    <code>sudo python3 /path/to/kismet/filebeat_integration.py --elasticsearch-url "https://your-elasticsearch:9200" --username "your-username" --password "your-password" --device-name "forgedfate-device"</code>
                 </div>
                 <button class="k-api-copy-btn" onclick="copyFilebeatCommand()">
                     <i class="fa fa-copy"></i> Copy Command
@@ -1372,9 +1372,9 @@ function showFilebeatIntegrationDialog() {
 }
 
 function generateFilebeatCommand() {
-    var url = $('#filebeat-es-url').val() || 'https://172.18.18.20:9200';
-    var username = $('#filebeat-username').val() || 'filebeat-user';
-    var password = $('#filebeat-password').val() || 'password';
+    var url = $('#filebeat-es-url').val() || 'https://your-elasticsearch:9200';
+    var username = $('#filebeat-username').val() || 'your-username';
+    var password = $('#filebeat-password').val() || 'your-password';
     var device = $('#filebeat-device').val() || 'forgedfate-device';
     var prefix = $('#filebeat-prefix').val() || 'kismet';
 
