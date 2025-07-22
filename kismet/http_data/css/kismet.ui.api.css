@@ -892,3 +892,153 @@
     font-size: 13px;
     color: #155724;
 }
+
+/* Filebeat Integration Styles */
+.k-api-button-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.k-api-filebeat-btn {
+    background: #17a2b8;
+}
+
+.k-api-filebeat-btn:hover {
+    background: #138496;
+    box-shadow: 0 4px 8px rgba(23,162,184,0.3);
+}
+
+.k-api-filebeat-dialog {
+    padding: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.k-api-filebeat-dialog h3 {
+    margin: 0 0 15px 0;
+    color: #17a2b8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.k-api-filebeat-dialog p {
+    margin: 0 0 20px 0;
+    color: #6c757d;
+    line-height: 1.5;
+}
+
+.k-api-filebeat-info {
+    background: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.k-api-filebeat-info h4 {
+    margin: 0 0 10px 0;
+    color: #0056b3;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.k-api-filebeat-info ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.k-api-filebeat-info li {
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #495057;
+}
+
+.k-api-filebeat-command {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.k-api-filebeat-command h4 {
+    margin: 0 0 10px 0;
+    color: #495057;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.k-api-command-display {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    word-break: break-all;
+    overflow-x: auto;
+}
+
+.k-api-command-display code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+}
+
+.k-api-copy-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.k-api-copy-btn:hover {
+    background: #218838;
+}
+
+.k-api-copy-btn.k-api-success {
+    background: #20c997;
+}
+
+.k-api-filebeat-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+/* Responsive filebeat dialog */
+@media (max-width: 768px) {
+    .k-api-button-container {
+        flex-direction: column;
+    }
+
+    .k-api-filebeat-dialog {
+        padding: 15px;
+    }
+
+    .k-api-filebeat-actions {
+        flex-direction: column;
+    }
+
+    .k-api-command-display {
+        font-size: 11px;
+        padding: 8px;
+    }
+}

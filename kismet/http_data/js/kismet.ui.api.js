@@ -480,7 +480,9 @@ function createHelpSection(export_type) {
             helpTitle = 'Elasticsearch Export Help';
             helpContent = 'Elasticsearch provides powerful search and analytics capabilities. ' +
                          'Supports offline mode for disconnected operation. ' +
-                         'URL format: http://host:port or https://host:port. Default port: 9200.';
+                         'URL format: http://host:port or https://host:port. Default port: 9200. ' +
+                         'For advanced integration, use the Filebeat Integration Tool to automatically ' +
+                         'configure log shipping from Kismet to Elasticsearch.';
             break;
 
         case 'mqtt':
@@ -684,6 +686,26 @@ function createConnectivityTestPanel(export_type) {
         testConnectivity(export_type);
     });
 
+    var buttonContainer = $('<div>', {
+        class: 'k-api-button-container'
+    });
+
+    buttonContainer.append(testButton);
+
+    // Add Filebeat integration button for Elasticsearch
+    if (export_type === 'elasticsearch') {
+        var filebeatButton = $('<button>', {
+            class: 'k-api-test-btn k-api-filebeat-btn',
+            id: `filebeat-btn-${export_type}`
+        })
+        .html('<i class="fa fa-cogs"></i> Setup Filebeat Integration')
+        .on('click', function() {
+            showFilebeatIntegrationDialog();
+        });
+
+        buttonContainer.append(filebeatButton);
+    }
+
     var resultsContainer = $('<div>', {
         class: 'k-api-test-results',
         id: `test-results-${export_type}`,
@@ -691,7 +713,7 @@ function createConnectivityTestPanel(export_type) {
     });
 
     panel.append(statusContainer);
-    panel.append(testButton);
+    panel.append(buttonContainer);
     panel.append(resultsContainer);
 
     return panel;
@@ -1255,6 +1277,139 @@ function exportDiagnosticReport() {
     a.click();
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
+}
+
+// Filebeat Integration Dialog
+function showFilebeatIntegrationDialog() {
+    var config = export_configs['elasticsearch'];
+
+    var dialogContent = `
+        <div class="k-api-filebeat-dialog">
+            <h3><i class="fa fa-cogs"></i> Filebeat Integration Setup</h3>
+            <p>This tool will automatically configure Filebeat to ship Kismet logs to your Elasticsearch cluster.</p>
+
+            <div class="k-api-form">
+                <div class="k-api-form-field">
+                    <label>Elasticsearch URL:</label>
+                    <input type="text" id="filebeat-es-url" value="${config.hosts || ''}"
+                           placeholder="https://172.18.18.20:9200">
+                </div>
+
+                <div class="k-api-form-field">
+                    <label>Username:</label>
+                    <input type="text" id="filebeat-username" value="${config.username || ''}"
+                           placeholder="filebeat-user">
+                </div>
+
+                <div class="k-api-form-field">
+                    <label>Password:</label>
+                    <input type="password" id="filebeat-password" value="${config.password || ''}"
+                           placeholder="password">
+                </div>
+
+                <div class="k-api-form-field">
+                    <label>Device Name:</label>
+                    <input type="text" id="filebeat-device" value="forgedfate-device"
+                           placeholder="forgedfate-device">
+                </div>
+
+                <div class="k-api-form-field">
+                    <label>Index Prefix:</label>
+                    <input type="text" id="filebeat-prefix" value="kismet"
+                           placeholder="kismet">
+                </div>
+            </div>
+
+            <div class="k-api-filebeat-info">
+                <h4><i class="fa fa-info-circle"></i> What this will do:</h4>
+                <ul>
+                    <li>Automatically discover all Kismet log files</li>
+                    <li>Generate optimized Filebeat configuration</li>
+                    <li>Create separate indices for each log type (devices, bluetooth, wifi, etc.)</li>
+                    <li>Backup existing Filebeat configuration</li>
+                    <li>Test and restart Filebeat service</li>
+                </ul>
+            </div>
+
+            <div class="k-api-filebeat-command">
+                <h4><i class="fa fa-terminal"></i> Command to run:</h4>
+                <div class="k-api-command-display" id="filebeat-command">
+                    <code>sudo python3 /path/to/kismet/filebeat_integration.py --elasticsearch-url "https://172.18.18.20:9200" --username "filebeat-user" --password "password" --device-name "forgedfate-device"</code>
+                </div>
+                <button class="k-api-copy-btn" onclick="copyFilebeatCommand()">
+                    <i class="fa fa-copy"></i> Copy Command
+                </button>
+            </div>
+
+            <div class="k-api-filebeat-actions">
+                <button class="k-api-test-btn" onclick="generateFilebeatCommand()">
+                    <i class="fa fa-refresh"></i> Update Command
+                </button>
+                <button class="k-api-test-btn k-api-filebeat-btn" onclick="downloadFilebeatScript()">
+                    <i class="fa fa-download"></i> Download Integration Script
+                </button>
+            </div>
+        </div>
+    `;
+
+    $.jsPanel({
+        id: 'filebeat-integration',
+        headerTitle: '<i class="fa fa-cogs"></i> Filebeat Integration',
+        paneltype: 'modal',
+        headerControls: {
+            controls: 'closeonly',
+            iconfont: 'jsglyph',
+        },
+        contentSize: {
+            width: Math.min($(window).width() * 0.8, 800),
+            height: Math.min($(window).height() * 0.8, 600)
+        },
+        content: dialogContent,
+        callback: function() {
+            generateFilebeatCommand();
+        }
+    });
+}
+
+function generateFilebeatCommand() {
+    var url = $('#filebeat-es-url').val() || 'https://172.18.18.20:9200';
+    var username = $('#filebeat-username').val() || 'filebeat-user';
+    var password = $('#filebeat-password').val() || 'password';
+    var device = $('#filebeat-device').val() || 'forgedfate-device';
+    var prefix = $('#filebeat-prefix').val() || 'kismet';
+
+    var command = `sudo python3 /path/to/kismet/filebeat_integration.py ` +
+                 `--elasticsearch-url "${url}" ` +
+                 `--username "${username}" ` +
+                 `--password "${password}" ` +
+                 `--device-name "${device}" ` +
+                 `--index-prefix "${prefix}"`;
+
+    $('#filebeat-command code').text(command);
+}
+
+function copyFilebeatCommand() {
+    var command = $('#filebeat-command code').text();
+    navigator.clipboard.writeText(command).then(function() {
+        // Show temporary success message
+        var btn = $('.k-api-copy-btn');
+        var originalText = btn.html();
+        btn.html('<i class="fa fa-check"></i> Copied!').addClass('k-api-success');
+        setTimeout(function() {
+            btn.html(originalText).removeClass('k-api-success');
+        }, 2000);
+    });
+}
+
+function downloadFilebeatScript() {
+    // Create a download link for the filebeat integration script
+    var scriptUrl = '/filebeat_integration.py';
+    var a = document.createElement('a');
+    a.href = scriptUrl;
+    a.download = 'filebeat_integration.py';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 /* Add the API sidebar item */
