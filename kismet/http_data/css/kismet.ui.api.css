@@ -272,3 +272,623 @@
 .k-api-export-panel:not(.k-api-panel-disabled) .k-api-panel-header h3 {
     color: #28a745;
 }
+
+/* Connectivity Testing Styles */
+.k-api-connectivity-panel {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.k-api-connectivity-panel h4 {
+    margin: 0 0 15px 0;
+    color: #495057;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.k-api-connectivity-status {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+}
+
+.k-api-status-indicator {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.k-api-status-success {
+    color: #28a745;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.k-api-status-warning {
+    color: #ffc107;
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+}
+
+.k-api-status-error {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.k-api-status-unknown {
+    color: #6c757d;
+    background-color: #e2e3e5;
+    border-color: #d6d8db;
+}
+
+.k-api-test-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.k-api-test-btn:hover:not(:disabled) {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.k-api-test-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.k-api-test-results {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.k-api-test-details {
+    font-size: 13px;
+}
+
+.k-api-detail-item {
+    margin-bottom: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.k-api-detail-item:last-child {
+    border-bottom: none;
+}
+
+.k-api-detail-section,
+.k-api-error-section,
+.k-api-suggestion-section {
+    margin: 15px 0;
+}
+
+.k-api-detail-section strong,
+.k-api-error-section strong,
+.k-api-suggestion-section strong {
+    color: #495057;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.k-api-detail-section ul,
+.k-api-error-section ul,
+.k-api-suggestion-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.k-api-detail-section li {
+    margin-bottom: 4px;
+    color: #6c757d;
+}
+
+.k-api-error {
+    color: #dc3545;
+    margin-bottom: 4px;
+}
+
+.k-api-suggestion {
+    color: #007bff;
+    margin-bottom: 4px;
+}
+
+.k-api-suggestion:before {
+    content: "💡 ";
+    margin-right: 4px;
+}
+
+/* Responsive adjustments for connectivity testing */
+@media (max-width: 768px) {
+    .k-api-test-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .k-api-connectivity-panel {
+        padding: 10px;
+    }
+
+    .k-api-test-results {
+        padding: 10px;
+    }
+}
+
+/* Animation for test results */
+.k-api-test-results {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Real-time Monitoring Styles */
+.k-api-monitoring-panel {
+    background: #e8f4fd;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.k-api-monitoring-panel h3 {
+    margin: 0 0 10px 0;
+    color: #007bff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.k-api-monitoring-panel p {
+    margin: 0 0 20px 0;
+    color: #495057;
+    font-size: 14px;
+}
+
+.k-api-monitoring-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.k-api-monitor-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.k-api-monitor-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+}
+
+.k-api-monitor-stop {
+    background: #dc3545;
+}
+
+.k-api-monitor-stop:hover {
+    background: #c82333;
+    box-shadow: 0 4px 8px rgba(220,53,69,0.3);
+}
+
+.k-api-monitoring-status {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 180px;
+    justify-content: center;
+}
+
+/* Enhanced status indicators for monitoring */
+.k-api-status-indicator {
+    transition: all 0.3s ease;
+}
+
+.k-api-status-indicator:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive monitoring panel */
+@media (max-width: 768px) {
+    .k-api-monitoring-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .k-api-monitor-btn,
+    .k-api-monitoring-status {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .k-api-monitoring-panel {
+        padding: 15px;
+    }
+}
+
+/* Diagnostic Report Styles */
+.k-api-diagnostic-report {
+    padding: 20px;
+    max-height: 600px;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.k-api-diagnostic-loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.k-api-diagnostic-error {
+    text-align: center;
+    padding: 40px;
+    color: #dc3545;
+}
+
+.k-api-diagnostic-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.k-api-diagnostic-header h2 {
+    margin: 0 0 10px 0;
+    color: #007bff;
+    font-size: 24px;
+}
+
+.k-api-diagnostic-header p {
+    margin: 5px 0;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.k-api-diagnostic-section {
+    margin-bottom: 25px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 20px;
+}
+
+.k-api-diagnostic-section h3 {
+    margin: 0 0 15px 0;
+    color: #495057;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 10px;
+}
+
+.k-api-diagnostic-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.k-api-diagnostic-section li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.k-api-troubleshooting-item {
+    margin-bottom: 20px;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+.k-api-troubleshooting-item h4 {
+    margin: 0 0 10px 0;
+    color: #007bff;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.k-api-test-result-summary {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.k-api-test-result-summary h4 {
+    margin: 0 0 10px 0;
+    color: #495057;
+    font-size: 16px;
+}
+
+.k-api-test-result-summary p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.k-api-diagnostic-actions {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #dee2e6;
+}
+
+.k-api-export-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.k-api-export-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(40,167,69,0.3);
+}
+
+.k-api-diagnostics-btn {
+    background: #17a2b8;
+}
+
+.k-api-diagnostics-btn:hover {
+    background: #138496;
+    box-shadow: 0 4px 8px rgba(23,162,184,0.3);
+}
+
+/* Status indicators in diagnostic report */
+.k-api-diagnostic-report .k-api-status-success {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.k-api-diagnostic-report .k-api-status-warning {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.k-api-diagnostic-report .k-api-status-error {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Responsive diagnostic report */
+@media (max-width: 768px) {
+    .k-api-diagnostic-report {
+        padding: 10px;
+    }
+
+    .k-api-diagnostic-section {
+        padding: 15px;
+    }
+
+    .k-api-diagnostic-header h2 {
+        font-size: 20px;
+    }
+
+    .k-api-troubleshooting-item,
+    .k-api-test-result-summary {
+        padding: 10px;
+    }
+}
+
+/* Configuration Validation Styles */
+.k-api-validation-feedback {
+    margin: 15px 0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.k-api-validation-errors {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.k-api-validation-warnings {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+    padding: 15px;
+}
+
+.k-api-validation-errors h5,
+.k-api-validation-warnings h5 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.k-api-validation-errors ul,
+.k-api-validation-warnings ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.k-api-validation-errors li,
+.k-api-validation-warnings li {
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+/* Tooltip styles */
+.k-api-tooltip {
+    margin-left: 5px;
+    color: #6c757d;
+    cursor: help;
+    font-size: 12px;
+}
+
+.k-api-tooltip:hover {
+    color: #007bff;
+}
+
+/* Enhanced form field styles */
+.k-api-form-field label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.k-api-input:invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 2px rgba(220,53,69,0.25);
+}
+
+.k-api-input:valid {
+    border-color: #28a745;
+}
+
+/* Configuration wizard styles */
+.k-api-wizard-step {
+    display: none;
+    padding: 20px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    background: #f8f9fa;
+    margin-bottom: 20px;
+}
+
+.k-api-wizard-step.active {
+    display: block;
+}
+
+.k-api-wizard-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.k-api-wizard-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.k-api-wizard-btn:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.k-api-wizard-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Help and guidance styles */
+.k-api-help-section {
+    background: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.k-api-help-section h4 {
+    margin: 0 0 10px 0;
+    color: #0056b3;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.k-api-help-section p {
+    margin: 0;
+    font-size: 13px;
+    color: #495057;
+    line-height: 1.4;
+}
+
+.k-api-quick-start {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.k-api-quick-start h4 {
+    margin: 0 0 10px 0;
+    color: #155724;
+    font-size: 14px;
+}
+
+.k-api-quick-start ol {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.k-api-quick-start li {
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #155724;
+}
